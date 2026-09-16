@@ -1,0 +1,38 @@
+# Archivos compilados
+*.apk
+*.ap_
+*.aab
+*.idsig
+# Excepcion: se versiona el APK de release para descarga directa
+!Github/apks/*.apk
+
+# Dalvik / ART
+*.dex
+*.class
+
+# Generados
+bin/
+gen/
+out/
+
+# Gradle
+.gradle/
+build/
+.kotlin/
+
+# Configuracion local (ruta del SDK, etc.)
+local.properties
+
+# Android Studio / IDE
+*.iml
+.idea/
+.DS_Store
+
+# Firma (nunca versionar)
+*.jks
+*.keystore
+signing.properties
+
+# Logs de crash
+crashes/
+*.log

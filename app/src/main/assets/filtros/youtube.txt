@@ -1,0 +1,88 @@
+! UtubeOrigin - filtros curados especificos para YouTube
+! Reglas de red (bloqueo de anuncios a nivel de URL)
+||googleads.g.doubleclick.net^
+||adservice.google.com^
+||static.doubleclick.net^
+||pubads.g.doubleclick.net^
+||securepubads.g.doubleclick.net^
+||tpc.googlesyndication.com^
+||pagead2.googlesyndication.com^
+||pagead.l.google.com^
+||googleads4.g.doubleclick.net^
+||googleads.g.doubleclick.net^
+||stats.g.doubleclick.net^
+||doubleclick.net^
+||googlesyndication.com^
+||2mdn.net^
+||admob.com^
+||adnxs.com^
+||adsystem.com^
+||advertising.com^
+||youtubeadserver.com^
+||invitemedia.com^
+||yieldmo.com^
+||amazon-adsystem.com^
+||scorecardresearch.com^
+||criteo.com^
+||criteo.net^
+||smartadserver.com^
+||taboola.com^
+||outbrain.com^
+||doubleverify.com^
+||moatads.com^
+||graphiq.com^
+||analytics.youtube.com^$third-party
+||google-analytics.com^$third-party
+! Excepciones: los endpoints esenciales de la API de YouTube NUNCA deben bloquearse
+! (las listas de uBlock los reescriben con $replace; bloquearlos deja la
+! reproduccion en carga infinita). Ojo: los patrones terminan en "?" para no
+! desproteger endpoints de anuncios como /player/ad_break o /get_midroll_.
+@@||youtube.com/youtubei/v1/player?
+@@||youtube.com/youtubei/v1/next?
+@@||youtube.com/youtubei/v1/browse?
+@@||youtube.com/youtubei/v1/get_watch?
+@@||youtube.com/youtubei/v1/search?
+@@||youtube.com/youtubei/v1/reel/reel_watch_sequence?
+! Excepciones de ANUNCIOS: el reproductor espera estos endpoints de forma
+! SINCRONA cuando toca publicidad. Si se bloquean (respuesta vacia), YouTube
+! niega la reproduccion (anti-adblock) y los videos no cargan con el bloqueador
+! ON. Se excepcionan para que el player no falle; la capa cosmetico + watchdog
+! (CSS + json-prune + skip) es la que oculta y salta la publicidad.
+@@||youtube.com/youtubei/v1/player/ad_break
+@@||youtube.com/get_midroll_
+@@||youtube.com/get_video
+@@||static.doubleclick.net/instream/ad_status.js
+@@||googleads.g.doubleclick.net/pagead/ads
+@@||googleads.g.doubleclick.net/pagead/id
+! Reglas cosmeticas (ocultar contenedores de anuncios en la interfaz)
+youtube.com##ytd-ad-slot-renderer
+youtube.com##ytd-display-ad-renderer
+youtube.com##ytd-in-feed-ad-layout-renderer
+youtube.com##ytd-promoted-sparkles-web-renderer
+youtube.com##ytd-video-masthead-ad-v3-renderer
+youtube.com##ytd-banner-promo-renderer
+youtube.com##ytd-companion-slot-renderer
+youtube.com##ytd-statement-banner-renderer
+youtube.com##ytd-ad-slot-renderer
+youtube.com##ytd-banner-ad-layout-renderer
+youtube.com###masthead-ad
+youtube.com###player-ads
+youtube.com###player-ads.ytp-ad-module
+youtube.com##.ytp-ad-module
+youtube.com##.ytp-ad-player-overlay
+youtube.com##.ytp-ad-text-overlay
+youtube.com##.ytp-ad-image-overlay
+youtube.com##.ytp-ad-skip-button-container
+youtube.com##.ytp-ad-badge
+youtube.com##.ytp-paid-content-overlay
+youtube.com##.ytp-ad-overlay-slot
+m.youtube.com##ytm-ad-slot-renderer
+m.youtube.com##ytm-in-feed-ad-layout-renderer
+m.youtube.com##ytm-promoted-sparkles-web-renderer
+m.youtube.com##ytm-video-masthead-ad-v3-renderer
+m.youtube.com##ytm-companion-slot-renderer
+m.youtube.com##ytm-logo-ad-renderer
+m.youtube.com##ytm-display-ad-renderer
+m.youtube.com##ytm-ad-slot-renderer
+m.youtube.com##.sparkles-light-weight
+m.youtube.com##.ytm-promoted-sparkles-web-renderer

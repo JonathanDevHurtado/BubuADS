@@ -1,0 +1,31 @@
+/* ============================================================
+   BubuADS Estable — Tema (CSS)
+   Ajustes visuales MINIMOS sobre la interfaz NATIVA de YouTube.
+   Deliberadamente NO se altera la estructura ni el layout de
+   YouTube: asi la app no hereda bugs de maquetacion. El bloqueo
+   cosmetico de anuncios (Capa 2) se inyecta aparte, compilado por
+   Kotlin en su propio <style id="uo-css">.
+   ============================================================ */
+
+/* --- Audio siempre activo ---
+   El modulo reproduccion.js (forceAudio) fuerza video.muted=false,
+   asi que el boton blanco "activar sonido" sobra. */
+html.bubu-page-watch .ytp-unmute,
+html.bubu-page-watch .ytp-unmute-box,
+html.bubu-page-watch .ytp-unmute-icon,
+html.bubu-page-watch .ytp-unmute-inner {
+    display: none !important;
+}
+
+/* --- Detalles modernos y seguros (no cambian el layout) --- */
+
+/* Desplazamiento suave */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Avatares de canal redondeados */
+ytm-profile-icon img,
+ytm-profile-icon yt-img-shadow img {
+    border-radius: 50% !important;
+}
