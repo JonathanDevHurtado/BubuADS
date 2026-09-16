@@ -34,6 +34,16 @@ sonando en segundo plano y aprovechar toda la pantalla.
 
 ---
 
+## Capturas
+
+<p align="center">
+  <img src="Github/capturas/inicio.png" width="30%" alt="Pantalla de inicio"/>
+  &nbsp;&nbsp;
+  <img src="Github/capturas/video.png" width="30%" alt="Página de vídeo"/>
+</p>
+
+---
+
 ## Características
 
 | Característica | Descripción |
