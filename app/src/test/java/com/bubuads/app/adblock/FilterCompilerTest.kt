@@ -29,6 +29,25 @@ class FilterCompilerTest {
     }
 
     @Test
+    fun compilacionEnStreamingEquivaleALaPorListas() {
+        // El modo streaming (menos memoria) debe dar EXACTAMENTE el mismo
+        // resultado que compilar la lista completa.
+        val lines = assetLines()
+        val rules = FilterCompiler.compileNetwork(lines)
+        val css = FilterCompiler.compileCosmetic(lines)
+        val compiled = FilterCompiler.compile { consumer -> lines.forEach(consumer) }
+
+        assertEquals("mismos hosts bloqueados", rules.blockedHosts, compiled.network.blockedHosts)
+        assertEquals("mismo CSS cosmetico", css, compiled.cosmetic)
+        // El modo streaming separa las lineas cosmeticas (##...) y NO las mete
+        // como substrings de red; por eso sus substrings son un subconjunto.
+        assertTrue(
+            "substrings de red contenidos en los de la lista completa",
+            compiled.network.substrings.all { it in rules.substrings }
+        )
+    }
+
+    @Test
     fun noReglasDegeneradas() {
         // Regression del bug critico: reglas que compilan a .* / hosts vacios
         val rules = FilterCompiler.compileNetwork(assetLines())

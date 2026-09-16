@@ -31,6 +31,15 @@ class AdBlocker(private val context: Context) {
             "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters.txt",
             "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/quick-fixes.txt"
         )
+
+        /** Listas empaquetadas en `assets/filtros/` (se leen en streaming). */
+        private val ASSET_FILTERS = arrayOf(
+            "filtros/easylist.txt",
+            "filtros/easyprivacy.txt",
+            "filtros/ublock-filters.txt",
+            "filtros/quick-fixes.txt",
+            "filtros/youtube.txt"
+        )
     }
 
     private val cacheDir: File
@@ -62,25 +71,52 @@ class AdBlocker(private val context: Context) {
         // Si no hay cache, compilar en background sin bloquear el main thread
         thread(name = "adblock-compile", isDaemon = true) {
             try {
-                val assets = arrayOf(
-                    "filtros/easylist.txt",
-                    "filtros/easyprivacy.txt",
-                    "filtros/ublock-filters.txt",
-                    "filtros/quick-fixes.txt",
-                    "filtros/youtube.txt"
-                )
-                val lines = ArrayList<String>()
-                for (a in assets) {
-                    context.assets.open(a).bufferedReader().useLines { lines.addAll(it) }
-                }
-                compileAndPublish(lines)
-                writeCache()
+                compileAssets()
                 readyRef.set(true)
                 Log.i(TAG, "Compilacion inicial completada")
+            } catch (e: OutOfMemoryError) {
+                // La compilacion es intensiva en memoria. Si el heap esta muy
+                // lleno (p. ej. al volver de jugar), degradamos SIN romper ni
+                // mostrar el dialogo de crash: liberamos y reintentamos una vez.
+                Log.w(TAG, "OOM al compilar las listas; reintentando tras liberar memoria")
+                System.gc()
+                try {
+                    compileAssets()
+                    readyRef.set(true)
+                    Log.i(TAG, "Compilacion inicial completada (2do intento)")
+                } catch (e2: Throwable) {
+                    Log.e(TAG, "No se pudieron compilar las listas: ${e2.message}")
+                }
             } catch (e: Throwable) {
                 CrashCatcher.saveCrash(context, "compile", e)
             }
         }
+    }
+
+    /** Lee las listas empaquetadas en streaming y publica las reglas. */
+    private fun compileAssets() {
+        val started = System.currentTimeMillis()
+        val compiled = FilterCompiler.compile { consumer -> feedAssets(consumer) }
+        publish(compiled, started)
+    }
+
+    /** Entrega cada linea de cada asset a [consumer] (sin guardar la lista). */
+    private fun feedAssets(consumer: (String) -> Unit) {
+        for (a in ASSET_FILTERS) {
+            context.assets.open(a).bufferedReader().useLines { seq -> seq.forEach(consumer) }
+        }
+    }
+
+    /** Publica las reglas compiladas, actualiza estadisticas y escribe la cache. */
+    private fun publish(compiled: FilterCompiler.Compiled, started: Long) {
+        rulesRef.set(compiled.network)
+        cosmeticRef.set(compiled.cosmetic)
+        updateStats()
+        writeCache()
+        val r = compiled.network
+        Log.i(TAG, "Compilado en ${System.currentTimeMillis() - started} ms: " +
+                "hosts=${r.blockedHosts.size} ctx=${r.ctxHostBlocks.size} " +
+                "paths=${r.hostPathBlocks.size} css=${compiled.cosmetic.length}")
     }
 
     /** Intenta cargar las reglas compiladas desde cache. Devuelve true si fueron utiles. */
@@ -104,37 +140,28 @@ class AdBlocker(private val context: Context) {
     /** Actualiza las listas desde Internet en segundo plano. */
     fun updateLists(onDone: () -> Unit) {
         thread(name = "adblock-update", isDaemon = true) {
-            val all = ArrayList<String>()
+            val downloaded = ArrayList<String>()
             var anyOk = false
             for (url in FILTER_SOURCES) {
                 try {
                     val body = fetch(url)
                     if (body != null && body.isNotBlank()) {
-                        all.addAll(body.lineSequence())
+                        body.lineSequence().forEach { downloaded.add(it) }
                         anyOk = true
                     }
                 } catch (e: Throwable) {
                     Log.w(TAG, "Fallo al descargar $url: ${e.message}")
                 }
             }
-            val local = arrayOf(
-                "filtros/easylist.txt",
-                "filtros/easyprivacy.txt",
-                "filtros/ublock-filters.txt",
-                "filtros/quick-fixes.txt",
-                "filtros/youtube.txt"
-            )
-            try {
-                for (a in local) {
-                    context.assets.open(a).bufferedReader().useLines { all.addAll(it) }
-                }
-            } catch (e: Throwable) {
-                Log.w(TAG, "Fallo al leer assets: ${e.message}")
-            }
-            if (anyOk || all.isNotEmpty()) {
+            if (anyOk || downloaded.isNotEmpty()) {
                 try {
-                    compileAndPublish(all)
-                    writeCache()
+                    val started = System.currentTimeMillis()
+                    val compiled = FilterCompiler.compile { consumer ->
+                        for (line in downloaded) consumer(line)
+                        feedAssets(consumer)
+                    }
+                    downloaded.clear() // liberar cuanto antes
+                    publish(compiled, started)
                     lastUpdate = System.currentTimeMillis()
                     prefs().edit().putLong("last_update", lastUpdate).apply()
                 } catch (e: Throwable) {
@@ -143,17 +170,6 @@ class AdBlocker(private val context: Context) {
             }
             onDone()
         }
-    }
-
-    private fun compileAndPublish(lines: List<String>) {
-        val started = System.currentTimeMillis()
-        val rules = FilterCompiler.compileNetwork(lines)
-        val css = FilterCompiler.compileCosmetic(lines)
-        rulesRef.set(rules)
-        cosmeticRef.set(css)
-        updateStats()
-        Log.i(TAG, "Compilado en ${System.currentTimeMillis() - started} ms: " +
-                "hosts=${rules.blockedHosts.size} ctx=${rules.ctxHostBlocks.size} paths=${rules.hostPathBlocks.size} css=${css.length}")
     }
 
     private fun updateStats() {

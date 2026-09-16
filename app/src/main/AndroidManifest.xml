@@ -19,7 +19,8 @@
         android:hardwareAccelerated="true"
         android:usesCleartextTraffic="false"
         android:supportsRtl="true"
-        android:allowBackup="true">
+        android:allowBackup="true"
+        android:largeHeap="true">
 
         <activity
             android:name="com.bubuads.app.SplashActivity"

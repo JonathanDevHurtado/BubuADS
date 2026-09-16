@@ -15,6 +15,43 @@ package com.bubuads.app.adblock
  */
 object FilterCompiler {
 
+    /** Resultado de una compilacion completa (red + cosmetico). */
+    class Compiled(val network: NetworkRules, val cosmetic: String)
+
+    /**
+     * Compila red + cosmetico en **una sola pasada y en streaming**: `feed`
+     * entrega cada linea de las listas y aqui se procesa al vuelo, sin guardar
+     * nunca la lista completa en memoria. Reduce mucho el pico de memoria (la
+     * causa del `OutOfMemoryError` al compilar las ~4 MB de listas).
+     */
+    fun compile(feed: ((String) -> Unit) -> Unit): Compiled {
+        val rules = NetworkRules()
+        val blocks = LinkedHashSet<String>()
+        val exceptions = LinkedHashSet<String>()
+        feed { line ->
+            val t = line.trim()
+            if (t.isNotEmpty() && !t.startsWith('!') && !t.startsWith('[')) {
+                val ex = t.startsWith("#@#")
+                val marker = if (ex) "#@#" else "##"
+                val i = t.indexOf(marker)
+                if (i >= 0) {
+                    val domain = t.substring(0, i).trim()
+                    val sel = t.substring(i + marker.length).trim()
+                    if (sel.isNotEmpty() && cosmeticApplies(domain, sel)) {
+                        if (ex) exceptions.add(sel) else blocks.add(sel)
+                    }
+                } else {
+                    parseRule(t, rules)
+                }
+            }
+        }
+        rules.rebuildMatchers()
+        val sb = StringBuilder(blocks.sumOf { it.length } + exceptions.sumOf { it.length } + 1024)
+        for (b in blocks) sb.append(b).append("{display:none!important}")
+        for (x in exceptions) sb.append(x).append("{display:block!important;visibility:visible!important}")
+        return Compiled(rules, sb.toString())
+    }
+
     /** Compila las reglas de RED de las listas dadas. */
     fun compileNetwork(lines: List<String>): NetworkRules {
         val rules = NetworkRules()

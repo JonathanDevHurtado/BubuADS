@@ -5,6 +5,22 @@ Todos los cambios notables de **BubuADS** se documentan en este archivo.
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/),
 y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.1] - 2026-09-15
+
+### Corregido
+- **`OutOfMemoryError` al compilar las listas de filtros** (al volver a la app
+  tras un uso intensivo). El bloqueador quedaba sin reglas hasta el siguiente
+  intento. Ahora hay más heap, la compilación es en streaming (menos memoria) y
+  el OOM se maneja sin romper.
+
+### Cambiado
+- `android:largeHeap="true"`: el límite de memoria sube de 256 MB a 512 MB.
+- `FilterCompiler.compile()`: compila red y cosmético en una sola pasada, leyendo
+  las listas línea a línea (sin guardarlas todas en memoria).
+
+### Añadido
+- Test `compilacionEnStreamingEquivaleALaPorListas` (13 tests en total).
+
 ## [1.0] - 2026-09-14
 
 ### Añadido
