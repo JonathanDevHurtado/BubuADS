@@ -46,6 +46,8 @@ sonando en segundo plano y aprovechar toda la pantalla.
   <img src="Github/capturas/inicio.png" width="30%" alt="Pantalla de inicio"/>
   &nbsp;&nbsp;
   <img src="Github/capturas/video.png" width="30%" alt="Página de vídeo"/>
+  &nbsp;&nbsp;
+  <img src="Github/capturas/shorts.png" width="30%" alt="Shorts"/>
 </p>
 
 ---
