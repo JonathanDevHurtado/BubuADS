@@ -223,13 +223,13 @@ El detalle está en [`CHANGELOG.md`](CHANGELOG.md) y
 
 ---
 
-## Arte
+## Personaje: Bubu
 
 <p align="center">
   <img src="Github/arte/BubuPremium.png" width="72%" alt="BubuPremium — mascota de BubuADS"/>
 </p>
 
-Mascota de BubuADS — arte por **VannyArt**.
+Mascota de BubuADS - Arte Hecho Por La Artista VannyArt
 
 ---
 
