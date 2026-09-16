@@ -9,11 +9,17 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Versi%C3%B3n-1.0-blue" alt="Versión 1.0"/>
+  <img src="https://img.shields.io/badge/Versi%C3%B3n-1.1-blue" alt="Versión 1.1"/>
   <img src="https://img.shields.io/badge/Android-7.0%2B-green" alt="Android 7.0+"/>
   <img src="https://img.shields.io/badge/Kotlin-2.0-purple" alt="Kotlin"/>
   <img src="https://img.shields.io/badge/License-MIT-orange" alt="Licencia MIT"/>
   <img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs welcome"/>
+</p>
+
+<p align="center">
+  <a href="https://github.com/JonathanDevHurtado/BubuADS/releases/latest">
+    <img src="https://img.shields.io/badge/Descargar-APK-e11d48?style=for-the-badge" alt="Descargar APK"/>
+  </a>
 </p>
 
 ---
@@ -114,7 +120,8 @@ BubuADS/
 ## Instalación
 
 ### Opción 1 — Descargar el APK
-Ve a la sección [Releases](https://github.com/JonathanDevHurtado/BubuADS/releases)
+Descarga la última versión desde **[Releases](https://github.com/JonathanDevHurtado/BubuADS/releases/latest)**
+([BubuADS-v1.1.apk](https://github.com/JonathanDevHurtado/BubuADS/releases/download/v1.1/BubuADS-v1.1.apk))
 o usa el APK firmado de [`Github/apks/`](Github/apks/).
 
 ### Opción 2 — Compilar desde el código fuente
@@ -175,6 +182,10 @@ La firma se lee de `signing.properties` (no versionado) y
 ---
 
 ## Historial de versiones
+
+### v1.1 — Fix de memoria al compilar filtros
+- Corregido el `OutOfMemoryError` al compilar las listas: más heap (512 MB) y
+  compilación en streaming (menos memoria).
 
 ### v1.0 — Versión estable inicial
 - Bloqueo de anuncios en 3 capas.
