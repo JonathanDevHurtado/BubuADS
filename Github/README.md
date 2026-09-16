@@ -43,11 +43,13 @@ sonando en segundo plano y aprovechar toda la pantalla.
 ## Capturas
 
 <p align="center">
-  <img src="Github/capturas/inicio.png" width="30%" alt="Pantalla de inicio"/>
-  &nbsp;&nbsp;
-  <img src="Github/capturas/video.png" width="30%" alt="Página de vídeo"/>
-  &nbsp;&nbsp;
-  <img src="Github/capturas/shorts.png" width="30%" alt="Shorts"/>
+  <img src="Github/capturas/inicio.png" width="23%" alt="Pantalla de inicio"/>
+  &nbsp;
+  <img src="Github/capturas/video.png" width="23%" alt="Página de vídeo"/>
+  &nbsp;
+  <img src="Github/capturas/splash.jpg" width="23%" alt="Pantalla de carga"/>
+  &nbsp;
+  <img src="Github/capturas/shorts.jpg" width="23%" alt="Shorts"/>
 </p>
 
 ---
