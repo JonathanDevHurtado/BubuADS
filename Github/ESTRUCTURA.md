@@ -53,6 +53,7 @@ BubuADS/
 │   ├── DOCUMENTACION.md                 #   Documentación
 │   ├── ESTRUCTURA.md                    #   Este archivo
 │   ├── apks/                            #   APK firmado por versión
+│   ├── arte/                            #   Arte y mascota (por VannyArt)
 │   ├── capturas/                        #   Capturas de pantalla
 │   ├── logs/                            #   Cambios por versión
 │   └── versiones/                       #   Historial de versiones

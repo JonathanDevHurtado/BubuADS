@@ -223,6 +223,16 @@ El detalle está en [`CHANGELOG.md`](CHANGELOG.md) y
 
 ---
 
+## Arte
+
+<p align="center">
+  <img src="Github/arte/BubuPremium.png" width="72%" alt="BubuPremium — mascota de BubuADS"/>
+</p>
+
+Mascota de BubuADS — arte por **VannyArt**.
+
+---
+
 ## Licencia
 
 Este proyecto está bajo la licencia **MIT**. Ver [`LICENSE`](LICENSE).
@@ -233,6 +243,8 @@ Este proyecto está bajo la licencia **MIT**. Ver [`LICENSE`](LICENSE).
 
 - **Autor:** [Jonathan Hurtado](https://github.com/JonathanDevHurtado)
 - **Email:** JonathanHurtadoDev@proton.me
+- **Artista:** VannyArt
+- **Contacto (arte):** vannyvaiart@gmail.com
 
 ---
 
