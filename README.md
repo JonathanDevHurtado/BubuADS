@@ -246,7 +246,7 @@ Este proyecto está bajo la licencia **MIT**. Ver [`LICENSE`](LICENSE).
 - **Autor:** [Jonathan Hurtado](https://github.com/JonathanDevHurtado)
 - **Email:** JonathanHurtadoDev@proton.me
 - **Artista:** VannyArt
-- **Contacto (arte):** vannyvaiart@gmail.com
+- **Email:** vannyvaiart@gmail.com
 
 ---
 
